@@ -3,6 +3,7 @@ using GitTracker.Core.Interfaces;
 using GitTracker.Core.Services;
 using GitTracker.Web.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 
 namespace GitTracker.Web.Controllers
 {
@@ -33,6 +34,19 @@ namespace GitTracker.Web.Controllers
 
         }
 
+        [HttpPatch]
+        public async Task<ActionResult<string>> UpdateIssue(Issue updatedIssue)
+        {
+            try
+            {
+                var response = await _gitHubService.UpdateIssue(updatedIssue);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return (ex is ArgumentNullException ? NotFound(ex.Message) : BadRequest(ex.Message));
+            }
+        }
         
     }
 }

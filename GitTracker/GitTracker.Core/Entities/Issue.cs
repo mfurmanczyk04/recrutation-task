@@ -8,6 +8,7 @@ namespace GitTracker.Core.Entities
 {
     public class Issue
     {
+        public string? IssueId { get; set; }
         public required string PersonalAccesToken { get; set; }
         public required string RepositoryName { get; set; }
         public required string RepositoryOwner { get; set; }
