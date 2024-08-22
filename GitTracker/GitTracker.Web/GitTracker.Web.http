@@ -1,0 +1,6 @@
+@GitTracker.Web_HostAddress = http://localhost:5134
+
+GET {{GitTracker.Web_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
