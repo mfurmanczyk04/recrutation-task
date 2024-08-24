@@ -14,6 +14,11 @@ builder.Services.AddScoped<GitHubService>(x =>
     var httpClient = new HttpClient();
     return new GitHubService(httpClient);
 });
+builder.Services.AddScoped<GitLabService>(x =>
+{
+    var httpClient = new HttpClient();
+    return new GitLabService(httpClient);
+});
 
 var app = builder.Build();
 
