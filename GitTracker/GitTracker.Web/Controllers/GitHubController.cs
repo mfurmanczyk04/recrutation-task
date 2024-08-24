@@ -1,7 +1,6 @@
 ﻿using GitTracker.Core.Entities;
 using GitTracker.Core.Interfaces;
 using GitTracker.Core.Services;
-using GitTracker.Web.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 
