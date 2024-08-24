@@ -34,7 +34,7 @@ namespace GitTracker.Web.Controllers
 
         }
 
-        [HttpPatch]
+        [HttpPatch("update")]
         public async Task<ActionResult<string>> UpdateIssue(Issue updatedIssue)
         {
             try
@@ -47,6 +47,20 @@ namespace GitTracker.Web.Controllers
                 return (ex is ArgumentNullException ? NotFound(ex.Message) : BadRequest(ex.Message));
             }
         }
-        
+
+        [HttpPut("close")]
+        public async Task<ActionResult<string>> CloseIssue(Issue closeIssue)
+        {
+            try
+            {
+                var response = await _gitHubService.CloseIssue(closeIssue);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return (ex is ArgumentNullException ? NotFound(ex.Message) : BadRequest(ex.Message));
+            }
+        }
+
     }
 }
