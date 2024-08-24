@@ -10,11 +10,15 @@ namespace GitTracker.Core.Entities
     {
         public string? IssueId { get; set; }
         public required string PersonalAccesToken { get; set; }
-        public string? RepositoryName { get; set; }
-        public string? RepositoryOwner { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
         public Enum? State { get; set; }
+
+        //github:
+        public string? RepositoryName { get; set; }
+        public string? RepositoryOwner { get; set; }
+
+        //gitlab:
         public string? GitlabProjectId { get; set; }
     }
 }

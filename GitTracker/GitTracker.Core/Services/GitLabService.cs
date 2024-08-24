@@ -3,10 +3,12 @@ using GitTracker.Core.Enums;
 using GitTracker.Core.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace GitTracker.Core.Services
@@ -46,45 +48,24 @@ namespace GitTracker.Core.Services
 
             return issue.GetProperty("web_url").GetString();
         }
-        public async Task<string> CloseIssue(Issue closeIssue)
-        {
-            if (closeIssue.GitlabProjectId == null)
-            {
-                throw new ArgumentNullException(nameof(closeIssue));
-            }
-
-            var requestContent = new
-            {
-                state_event = "close",
-            };
-
-            var content = new StringContent(JsonSerializer.Serialize(requestContent), Encoding.UTF8, "application/json");
-
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{_installationUrl}/projects/{closeIssue.GitlabProjectId}/issues/{closeIssue.IssueId}");
-            request.Headers.Add("Authorization", $"Bearer {closeIssue.PersonalAccesToken}");
-            request.Content = content;
-
-            var response = await _httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var responseData = await response.Content.ReadAsStringAsync();
-            var issue = JsonSerializer.Deserialize<JsonElement>(responseData);
-
-            return issue.GetProperty("web_url").GetString();
-        }
-
 
         public async Task<string> UpdateIssue(Issue updatedIssue)
         {
-            if (updatedIssue.GitlabProjectId == null || updatedIssue.Title == null || updatedIssue.Description == null)
+            var requestContent = new GitlabRequestContent();
+            if (updatedIssue.State == null)
             {
-                throw new ArgumentNullException(nameof(updatedIssue));
+                if (updatedIssue.GitlabProjectId == null || updatedIssue.Title == null || updatedIssue.Description == null)
+                {
+                    throw new ArgumentNullException(nameof(updatedIssue));
+                }
+                requestContent.description = updatedIssue.Description;
+                requestContent.title = updatedIssue.Title;
+                
             }
-
-            var requestContent = new
+            else
             {
-                description = updatedIssue.Description,
-                title = updatedIssue.Title,
-            };
+                requestContent.state_event = updatedIssue.State.ToString();
+            }
 
             var content = new StringContent(JsonSerializer.Serialize(requestContent), Encoding.UTF8, "application/json");
 
@@ -98,6 +79,11 @@ namespace GitTracker.Core.Services
             var issue = JsonSerializer.Deserialize<JsonElement>(responseData);
 
             return issue.GetProperty("web_url").GetString();
+        }
+        public async Task<string> CloseIssue(Issue closeIssue)
+        {
+            closeIssue.State = GitlabIssueState.close;
+            return await UpdateIssue(closeIssue);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace GitTracker.Web.Controllers
             }
             catch (Exception ex) 
             {
-                return (ex is ArgumentNullException ? NotFound(ex.Message) : BadRequest(ex.Message));
+                return ex is ArgumentNullException ? BadRequest(ex.Message) : NotFound(ex.Message);
             }
 
         }
@@ -43,7 +43,7 @@ namespace GitTracker.Web.Controllers
             }
             catch (Exception ex)
             {
-                return (ex is ArgumentNullException ? NotFound(ex.Message) : BadRequest(ex.Message));
+                return ex is ArgumentNullException ? BadRequest(ex.Message) : NotFound(ex.Message);
             }
         }
 
@@ -57,7 +57,7 @@ namespace GitTracker.Web.Controllers
             }
             catch (Exception ex)
             {
-                return (ex is ArgumentNullException ? NotFound(ex.Message) : BadRequest(ex.Message));
+                return ex is ArgumentNullException ? BadRequest(ex.Message) : NotFound(ex.Message);
             }
         }
 

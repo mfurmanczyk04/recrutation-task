@@ -88,7 +88,7 @@ namespace GitTracker.Core.Services
         {
             var requestContent = new
             {
-                state = IssueState.closed.ToString(),
+                state = GithubIssueState.closed.ToString(),
             };
 
             var content = new StringContent(JsonSerializer.Serialize(requestContent), Encoding.UTF8, "application/json");
