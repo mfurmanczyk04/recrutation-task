@@ -1,6 +1,7 @@
 ﻿using GitTracker.Core.Entities;
 using GitTracker.Core.Interfaces;
 using GitTracker.Core.Services;
+using GitTracker.Web.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
@@ -19,8 +20,16 @@ namespace GitTracker.Web.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<string>> AddIssue(Issue newIssue)
+        public async Task<ActionResult<string>> AddIssue(AddIssueGitlabDto newIssueDto)
         {
+            var newIssue = new Issue()
+            {
+                PersonalAccesToken = newIssueDto.PersonalAccesToken,
+                GitlabProjectId = newIssueDto.GitlabProjectId,
+                Title = newIssueDto.Title,
+                Description = newIssueDto.Description
+            };
+
             try
             {
                 var response = await _gitlabService.CreateIssue(newIssue);
@@ -28,13 +37,21 @@ namespace GitTracker.Web.Controllers
             }
             catch (Exception ex)
             {
-                return ex is ArgumentNullException ? BadRequest(ex.Message) : NotFound(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpPut("update")]
-        public async Task<ActionResult<string>> UpdateIssue(Issue updatedIssue)
+        public async Task<ActionResult<string>> UpdateIssue(UpdateIssueGitlabDto updatedIssueDto)
         {
+            var updatedIssue = new Issue()
+            {
+                PersonalAccesToken = updatedIssueDto.PersonalAccesToken,
+                GitlabProjectId = updatedIssueDto.GitlabProjectId,
+                Title = updatedIssueDto.Title,
+                Description = updatedIssueDto.Description,
+                IssueId = updatedIssueDto.IssueId
+            };
             try
             {
                 var response = await _gitlabService.UpdateIssue(updatedIssue);
@@ -42,12 +59,18 @@ namespace GitTracker.Web.Controllers
             }
             catch (Exception ex)
             {
-                return ex is ArgumentNullException ? BadRequest(ex.Message) : NotFound(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
         [HttpPut("close")]
-        public async Task<ActionResult<string>> CloseIssue(Issue closeIssue)
+        public async Task<ActionResult<string>> CloseIssue(CloseIssueGitlabDto closeIssueDto)
         {
+            var closeIssue = new Issue()
+            {
+                PersonalAccesToken = closeIssueDto.PersonalAccesToken,
+                GitlabProjectId = closeIssueDto.GitlabProjectId,
+                IssueId = closeIssueDto.IssueId
+            };
             try
             {
                 var response = await _gitlabService.CloseIssue(closeIssue);
@@ -55,7 +78,7 @@ namespace GitTracker.Web.Controllers
             }
             catch (Exception ex)
             {
-                return ex is ArgumentNullException ? BadRequest(ex.Message) : NotFound(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
     }
