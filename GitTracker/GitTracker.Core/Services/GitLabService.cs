@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace GitTracker.Core.Services
 {
-    public class GitLabService
+    public class GitLabService : IGitService
     {
         private readonly HttpClient _httpClient;
         private readonly string _installationUrl = "https://gitlab.com/api/v4";
