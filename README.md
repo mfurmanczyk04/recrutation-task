@@ -5,4 +5,5 @@ provide most important functionalites of the application. After building basic l
 to perform complex refactor.
 
 TODO: 
-refactor githubService.cs to use the same function to edit/close issue
+-refactor githubService.cs to use the same function to edit/close issue
+-refactor entieties to use different type of Issues for specific services
